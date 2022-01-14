@@ -19,6 +19,11 @@
             object-fit: cover;
             border-radius: 50%;
         }
+        
+        .message {
+            text-align: center;
+            color: rgb(214, 15, 15);
+        }
     </style>
 </head>
 
@@ -32,24 +37,24 @@
 
                             <h6><a href="../index.html">Back to home</a></h6>
                             <h4 class="text-center my-3 pb-3">PERSON</h4>
-
-                            <form class="row row-cols-lg-auto g-3 justify-content-center align-items-center mb-4 pb-2">
+                            <p class="message"></p>
+                            <form id="form-person" class="row row-cols-lg-auto g-3 justify-content-center align-items-center mb-4 pb-2">
                                 <div class="col-12">
                                     <div class="form-check" id="person1">
                                         <label for="">Person 1</label>
-                                        <input type="text" class="form-control add-tast-input" autocomplete="off" placeholder="Name" id="name" />
-                                        <input style="margin-top:5px" type="text" class="form-control add-tast-input" autocomplete="off" placeholder="Age" />
-                                        <input style="margin-top:5px" type="text" class="form-control add-tast-input" autocomplete="off" placeholder="Address" />
+                                        <input type="text" class="form-control add-tast-input name" autocomplete="off" placeholder="Name" id="name" />
+                                        <input style="margin-top:5px" type="text" class="form-control add-tast-input age" autocomplete="off" placeholder="Age" />
+                                        <input style="margin-top:5px" type="text" class="form-control add-tast-input address" autocomplete="off" placeholder="Address" />
 
                                     </div>
                                 </div>
                                 <div class="col-12">
                                     <div class="form-check" id="person2">
                                         <label for="">Person 2</label>
-                                        <input type="text" class="form-control add-tast-input" autocomplete="off" placeholder="Name" id="name" />
+                                        <input type="text" class="form-control add-tast-input name" autocomplete="off" placeholder="Name" id="name" />
 
-                                        <input style="margin-top:5px" type="text" class="form-control add-tast-input" autocomplete="off" placeholder="Age" />
-                                        <input style="margin-top:5px" type="text" class="form-control add-tast-input" autocomplete="off" placeholder="Address" />
+                                        <input style="margin-top:5px" type="text" class="form-control add-tast-input age" autocomplete="off" placeholder="Age" />
+                                        <input style="margin-top:5px" type="text" class="form-control add-tast-input address" autocomplete="off" placeholder="Address" />
 
                                     </div>
                                 </div>
@@ -58,10 +63,20 @@
                                     <button type="submit" class="btn btn-primary add-task-btn" id="add-btn">Add</button>
                                 </div>
 
-
                             </form>
+                            <table class="table mb-4">
+                                <thead>
+                                    <tr>
+                                        <th>No.</th>
+                                        <th scope="col">Full Name</th>
+                                        <th scope="col">Age</th>
+                                        <th scope="col">Address</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody">
 
-
+                                </tbody>
+                            </table>
 
                         </div>
                     </div>
@@ -72,53 +87,73 @@
     </section>
 
     <script>
-        const Student = (id, fullName, email, avatar, address, department) => {
-            this.id = id;
-            this.fullName = fullName;
-            this.email = email;
-            this.avatar = avatar;
-            this.address = address;
+        const tbody = document.querySelector("#tbody");
 
+        const Person = {
+            name: "",
+            age: null,
+            address: null,
+            showProfile: function() {
+                tbody.innerHTML += `<tr>
+
+                        <td>${this.personId}</td>
+                        <td>${this.name}</td>
+                        <td>${this.age}</td>
+                        <td>${this.address}</td>
+                    </tr>`
+            }
+        }
+
+        const Person1 = {
+            __proto__: Person,
+            personId: 1
+        }
+
+        const Person2 = {
+            __proto__: Person,
+            personId: 2
         }
     </script>
 
     <script>
-        const tbody1 = document.querySelector('#tbody-1');
-        const tbody2 = document.querySelector('#tbody-2');
-        const renderData = () => {
-            let data = `
-        <tr>
-            <td><img src="${student.avatar}" alt="avatar"></td>
-            <td>${student.fullName}</td>
-            <td>${student.email}</td>
-            <td>${student.department}</td>
-            <td>${student.average}</td>
-            <td>${student.address}</td>
-        </tr>
-        `;
-            let data2 = '';
-            tbody1.innerHTML = data;
-            student.subjects.forEach(e => {
-                data2 += `
-            <tr>
-                <td>${e.name}</td>
-                <td>${e.point}</td>
-            </tr>
-        `;
-            })
-            tbody2.innerHTML = data2;
-        }
-        renderData();
-
-        //  add new
         const addBtn = document.querySelector("#add-btn");
-        const nameField = document.querySelector("#name");
-        const pointField = document.querySelector("#point");
+        const inputFields = document.querySelectorAll("#form-person input")
+        const message = document.querySelector(".message");
+        // require value in input
+        const validateInput = () => {
+            let check = true;
+            for (let i = 0; i < inputFields.length; i++) {
+                if (inputFields[i].value === "") {
+                    check = false;
+                    break;
+                }
+            }
+            return check;
 
-        addBtn.addEventListener("click", function(e) {
+        }
+
+        addBtn.addEventListener("click", (e) => {
             e.preventDefault();
-            student.addSubject(nameField.value, pointField.value);
-            renderData();
+            tbody.innerHTML = "";
+            message.innerHTML = "";
+
+            if (validateInput()) {
+                Person1.name = inputFields[0].value;
+                Person1.age = inputFields[1].value;
+                Person1.address = inputFields[2].value;
+
+                Person1.showProfile();
+
+                Person2.name = inputFields[3].value;
+                Person2.age = inputFields[4].value;
+                Person2.address = inputFields[5].value;
+
+                Person2.showProfile();
+
+            } else {
+                message.innerHTML = "Vui lòng nhập đủ thông tin!";
+            }
+
         })
     </script>
 </body>
